@@ -58,7 +58,7 @@ try {
             console.log('Parse JSON of language list from environmental variable: ', process.env.REST_LANG);
             credentials.lang = JSON.parse(process.env.REST_LANG);
         } else {
-            console.warn('Both language JSON file ', lang_json, ' and REST_LANG ', process.env.REST_LANG, ' is blank. Use default API configuration.')
+            console.warn('Both language JSON file ', lang_json, ' and REST_LANG ', process.env.REST_LANG, ' are blank. Use default API configuration.')
         }
     }
 } catch (e) {
