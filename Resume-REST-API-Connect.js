@@ -83,6 +83,8 @@ const setCookie = require('set-cookie-parser');
  * Class for connect Resume API via HTTPS/1.1 REST API
  */
 class ResumeHttpAPIClient {
+
+    // Plan Add on Server Push Result in WebSocket 
     /** 
      * Create ResumeHttpAPIClient
      * @param {string} [host] - full host path for Resume API (https://resume.sati.co.th)
