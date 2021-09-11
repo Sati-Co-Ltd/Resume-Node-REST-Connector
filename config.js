@@ -31,20 +31,29 @@ var credentials = {
     "lang": null
 };
 
-const fs = require('fs')
+const fs = require('fs');
+const path = require('path');
 try {
-    if (fs.existsSync(credentials.CREDENTIALS_FILE)) {
-        console.log('Load Credentials file');
-        let load = JSON.parse(fs.readFileSync(credentials.CREDENTIALS_FILE, 'utf-8'));
-        credentials = {
-            ...credentials,
-            ...load
-        };
+    if (credentials.CREDENTIALS_FILE) {
+        let cred = path.resolve(process.cwd(), credentials.CREDENTIALS_FILE);
+        if (fs.existsSync(cred)) {
+            console.log('Load Credentials file');
+            let load = JSON.parse(fs.readFileSync(cred, 'utf-8'));
+            credentials = {
+                ...credentials,
+                ...load
+            };
+        } else {
+            console.warn('Credentials file: ', cred, ' not found. Use config from default or process.env.');
+        }
+    } else {
+        console.info('Credentials file is blank. Use config from default or process.env.');
     }
     if (!credentials.lang) {
-        if (fs.existsSync(credentials.lang_json)) {
-            console.log('Read language JSON from ', credentials.lang_json);
-            credentials.lang = JSON.parse(fs.readFileSync(credentials.lang_json));
+        let lang_json = path.resolve(process.cwd(), credentials.lang_json);
+        if (fs.existsSync(lang_json)) {
+            console.log('Read language JSON from ', lang_json);
+            credentials.lang = JSON.parse(fs.readFileSync(lang_json));
         } else if (process.env.REST_LANG) {
             console.log('Parse JSON of language list from environmental variable: ', process.env.REST_LANG);
             credentials.lang = JSON.parse(process.env.REST_LANG);
