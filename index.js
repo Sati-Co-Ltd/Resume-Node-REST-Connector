@@ -1,0 +1,1 @@
+module.exports = { HttpClient: require('./Resume-REST-API-Connect') };

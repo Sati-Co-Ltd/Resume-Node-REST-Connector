@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Resume API Connector for Node.JS (sati.co.th)",
   "scripts": {
-    "test": "node test/test.js"
+    "test": "node test/connect.js"
   },
   "repository": {
     "type": "git",
