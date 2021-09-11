@@ -1,0 +1,31 @@
+{
+  "name": "resume-node-rest-connector",
+  "version": "1.0.0",
+  "description": "Resume API Connector for Node.JS (sati.co.th)",
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pahntanapat/Resume-Node-REST-Connector.git"
+  },
+  "keywords": [
+    "Resume",
+    "API",
+    "SaTI.co.th",
+    "Medical",
+    "Speech-to-Clinical",
+    "Text",
+    "API",
+    "Client",
+    "Node.JS",
+    "REST",
+    "API"
+  ],
+  "author": "Tanapat Kahabodeekanokkul",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pahntanapat/Resume-Node-REST-Connector/issues"
+  },
+  "homepage": "https://github.com/pahntanapat/Resume-Node-REST-Connector#readme"
+}
