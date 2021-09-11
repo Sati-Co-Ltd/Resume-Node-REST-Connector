@@ -39,7 +39,7 @@ try {
         };
     }
     if (!credentials.lang) {
-        if (fs.existsSync(fs.readFileSync('./public/lang.json')))
+        if (fs.existsSync('./public/lang.json'))
             credentials.lang = JSON.parse(fs.readFileSync('./public/lang.json'));
         else if (process.env.REST_LANG)
             credentials.lang = JSON.parse(process.env.REST_LANG);
