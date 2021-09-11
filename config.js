@@ -12,13 +12,13 @@
 /**
  * Credentials object for Resume API
  * @typedef ResumeCredentials
- * @property {string} [CREDENTIALS_FILE] path to credentials file - default is from process.env.CREDENTIALS_FILE or "credentials.json".
- * @property {string} [host] full host path to Resume API - default is from process.env.REST_HOST.
- * @property {string} [username] username for Resume API - default is from process.env.REST_USER.
- * @property {string} [password] password for Resume API - default is from process.env.REST_PW.
- * @property {string|int} [section_id_default] default Section ID, information for Resume API - default is from process.env.REST_DEFAULT_SECTION or 0.
- * @property {string[]} [lang] language hints must be BCP-47 language code in string type or array of string type ordered by highest priority to suggest the speech-to-text API - the default is located in ./public/lang.json . See more detail of [BCP-47](https://github.com/libyal/libfwnt/wiki/Language-Code-identifiers) - default also can load from LANG_JSON path or REST_LANG environment variable.
- * @property {string} [lang_json] path to lang.json see example in public/lang.json
+ * @property {string} [CREDENTIALS_FILE] path to credentials file - default is from `process.env.CREDENTIALS_FILE` or "credentials.json".
+ * @property {string} [host] full host path to Resume API - default is from `process.env.REST_HOST`.
+ * @property {string} [username] username for Resume API - default is from `process.env.REST_USER`.
+ * @property {string} [password] password for Resume API - default is from `process.env.REST_PW`.
+ * @property {string|int} [section_id_default] default Section ID, information for Resume API - default is from `process.env.REST_DEFAULT_SECTION` or 0.
+ * @property {string[]} [lang] language hints must be BCP-47 language code in string type or array of string type ordered by highest priority to suggest the speech-to-text API - the default is located in `./public/lang.json` . See more detail of [BCP-47](https://github.com/libyal/libfwnt/wiki/Language-Code-identifiers) - default also can load from `process.env.LANG_JSON` path or `process.env.REST_LANG` environment variable.
+ * @property {string} [lang_json] path to lang.json, Please see example in [../public/lang.json](../public/lang.json), Default is `process.env.LANG_JSON` or "public/lang.json".
  */
 
 var credentials = {
