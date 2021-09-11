@@ -34,6 +34,7 @@ var credentials = {
 const fs = require('fs')
 try {
     if (fs.existsSync(credentials.CREDENTIALS_FILE)) {
+        console.log('Load Credentials file');
         let load = JSON.parse(fs.readFileSync(credentials.CREDENTIALS_FILE, 'utf-8'));
         credentials = {
             ...credentials,
@@ -41,10 +42,13 @@ try {
         };
     }
     if (!credentials.lang) {
-        if (fs.existsSync(credentials.lang_json))
+        if (fs.existsSync(credentials.lang_json)) {
+            console.log('Read language JSON from ', credentials.lang_json);
             credentials.lang = JSON.parse(fs.readFileSync(credentials.lang_json));
-        else if (process.env.REST_LANG)
+        } else if (process.env.REST_LANG) {
+            console.log('Parse JSON of language list from environmental variable: ', process.env.REST_LANG);
             credentials.lang = JSON.parse(process.env.REST_LANG);
+        }
     }
 } catch (e) {
     console.error(e);
