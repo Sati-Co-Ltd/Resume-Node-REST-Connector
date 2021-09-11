@@ -116,10 +116,20 @@ class ResumeHttpAPIClient {
     }
     /** 
      * Test Resume API connection
+     * @returns {Promise<axios>} Promise.all() of axios object
      */
     test() {
-        Promise.all([this.client.get('user'), this.client.get('test')])
+        return Promise.all([this.client.get('test'), this.client.get('user')])
             .then((res) => res.forEach((v, k) => console.log('Test connection', k, "Response:\n", v.data)))
+            .catch(err => console.log('Fail Test connection', err));
+    }
+    /** 
+     * Test Resume API connection without username and password
+     * @returns {Promise<axios>} Promise of axios object
+     */
+    testAnonymous() {
+        return axios.get(new URL("test", this.host).toString())
+            .then((res) => console.log('Test connection', "Response:\n", res.data))
             .catch(err => console.log('Fail Test connection', err));
     }
     /** 
