@@ -27,5 +27,12 @@
   "bugs": {
     "url": "https://github.com/pahntanapat/Resume-Node-REST-Connector/issues"
   },
-  "homepage": "https://github.com/pahntanapat/Resume-Node-REST-Connector#readme"
+  "homepage": "https://github.com/pahntanapat/Resume-Node-REST-Connector#readme",
+  "dependencies": {
+    "axios": "^0.21.4",
+    "axios-oauth-client": "^1.4.3",
+    "axios-token-interceptor": "^0.2.0",
+    "form-data": "^4.0.0",
+    "set-cookie-parser": "^2.4.8"
+  }
 }
