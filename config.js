@@ -17,7 +17,8 @@
  * @property {string} [username] username for Resume API - default is from process.env.REST_USER.
  * @property {string} [password] password for Resume API - default is from process.env.REST_PW.
  * @property {string|int} [section_id_default] default Section ID, information for Resume API - default is from process.env.REST_DEFAULT_SECTION or 0.
- * @property {string[]} [lang] language hints must be BCP-47 language code in string type or array of string type ordered by highest priority to suggest the speech-to-text API - the default is located in ./public/lang.json . See more detail of [BCP-47](https://github.com/libyal/libfwnt/wiki/Language-Code-identifiers) - default also can load from [./public/lang.json](./public/lang.json) file or REST_LANG environment variable.
+ * @property {string[]} [lang] language hints must be BCP-47 language code in string type or array of string type ordered by highest priority to suggest the speech-to-text API - the default is located in ./public/lang.json . See more detail of [BCP-47](https://github.com/libyal/libfwnt/wiki/Language-Code-identifiers) - default also can load from LANG_JSON path or REST_LANG environment variable.
+ * @property {string} [lang_json] path to lang.json see example in public/lang.json
  */
 
 var credentials = {
@@ -26,6 +27,7 @@ var credentials = {
     "username": process.env.REST_USER || "",
     "password": process.env.REST_PW || "",
     "section_id_default": process.env.REST_DEFAULT_SECTION || 0,
+    "lang_json": process.env.LANG_JSON || "./public/lang.json",
     "lang": null
 };
 
@@ -39,8 +41,8 @@ try {
         };
     }
     if (!credentials.lang) {
-        if (fs.existsSync('./public/lang.json'))
-            credentials.lang = JSON.parse(fs.readFileSync('./public/lang.json'));
+        if (fs.existsSync(credentials.lang_json))
+            credentials.lang = JSON.parse(fs.readFileSync(credentials.lang_json));
         else if (process.env.REST_LANG)
             credentials.lang = JSON.parse(process.env.REST_LANG);
     }
