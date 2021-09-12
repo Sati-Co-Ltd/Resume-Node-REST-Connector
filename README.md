@@ -86,13 +86,13 @@ You can give Resume Host, Username, and Password to the class constructor direct
 ### Create the object
 
 ```JS
-const {HttpClient} = require('resume-node-rest-connector');
+const { HttpClient } = require('resume-node-rest-connector');
 restClient = new HttpClient();
 ```
 
 You can override credentials by passing as constructor parameters.
 ```JS
-const {HttpClient} = require('resume-node-rest-connector');
+const { HttpClient } = require('resume-node-rest-connector');
 
 const HOST = "https://resume.sati.co.th";
 const USER = "USERNAME";
@@ -100,3 +100,9 @@ const PW = "PASSWORD";
 
 restClient = new HttpClient(HOST, USER, PW);
 ```
+
+### Request for new Session ID from Resume API
+```JS
+
+```
+***Note:*** the `HttpClient` object is totally stateless. Every method call, it ***always*** needs *session ID* and *section ID* to communication with correct session on Resume API.
