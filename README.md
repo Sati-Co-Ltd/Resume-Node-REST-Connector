@@ -3,7 +3,7 @@ Resume API Connector for Node.JS
 
 ## About the Project
 
-Resume&trade;, the Medical Speech to Clinical Summarized Text, is the API developed by [Thai SaTI Partnership, Limited](https://sati.co.th) (SaTI&trade;).
+Resume&trade; (RE-SU-ME), the Medical Speech to Clinical Summarized Text, is the API developed by [Thai SaTI Partnership, Limited](https://sati.co.th) (SaTI&trade;).
   <br>
 
 Resume Node.JS REST API Connector provides simplicity to connect Resume API as REST Client (and WebSocket Client in the future).
@@ -77,3 +77,26 @@ REST_LANG=["th","en"]
 ```
 
 <br>  
+
+### Programmatic input
+You can give Resume Host, Username, and Password to the class constructor directly. Please read create the object.
+
+## Usage
+
+### Create the object
+
+```JS
+const {HttpClient} = require('resume-node-rest-connector');
+restClient = new HttpClient();
+```
+
+You can override credentials by passing as constructor parameters.
+```JS
+const {HttpClient} = require('resume-node-rest-connector');
+
+const HOST = "https://resume.sati.co.th";
+const USER = "USERNAME";
+const PW = "PASSWORD";
+
+restClient = new HttpClient(HOST, USER, PW);
+```
