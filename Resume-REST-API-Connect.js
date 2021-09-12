@@ -11,6 +11,7 @@
 const CONFIG = require('./config');
 const axios = require('axios');
 const oauth = require('axios-oauth-client');
+const axiosRetry = require('axios-retry');
 const tokenProvider = require('axios-token-interceptor');
 const FormData = require('form-data');
 const setCookie = require('set-cookie-parser');
@@ -85,6 +86,7 @@ const setCookie = require('set-cookie-parser');
 class ResumeHttpAPIClient {
 
     // Plan Add on Server Push Result in WebSocket 
+    // onApiPushResult callback
     /** 
      * Create ResumeHttpAPIClient
      * @param {string} [host] - full host path for Resume API (https://resume.sati.co.th)
@@ -115,6 +117,19 @@ class ResumeHttpAPIClient {
         }
         this.client = axios.create(agent);
         this.client.interceptors.request.use(oauth.interceptor(tokenProvider, this.credentials));
+        axiosRetry(this.client, {
+            retries: 100,
+            retryCondition: function (error) {
+                return axiosRetry.isNetworkError(error) || axiosRetry.isRetryableError(error);
+            },
+            retryDelay: function (retryCount, error) {
+                if ((retryCount < 50) || (error.config && error.config.method && error.config.method == 'post')) {
+                    // assume is newSession POST method
+                    return 0;
+                }
+                return axiosRetry.exponentialDelay(retryCount - 50);
+            }
+        });
     }
     /** 
      * Test Resume API connection
@@ -199,7 +214,8 @@ class ResumeHttpAPIClient {
             user_datetime: info.datetime || null,
             client_datetime: (new Date().toJSON()),
             is_end: info.is_end,
-            tag: info.tag
+            tag: info.tag,
+            _id: info._id
         };
         if (info.user_transcript)
             //form.append("user_transcript", msgpack.pack(data.user_transcript,true));
@@ -208,7 +224,7 @@ class ResumeHttpAPIClient {
 
         if (soundStream)
             form.append("wav", soundStream, {
-                filename: '_id' + info._id + '.wav' || '0.wav',
+                filename: (info._id.toString() || '0') + '.wav',
                 contentType: 'audio/wav'
             }); //'audio/webm'
         //console.log('Append wav:: ' + form.getBuffer().length);
