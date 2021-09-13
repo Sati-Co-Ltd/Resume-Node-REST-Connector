@@ -10,16 +10,16 @@
 */
 
 /**
- * Credentials and Configuration object for Resume API. They can be overriden by prioriy: `credentials file` &gt; `process.env.*` &gt; `default API values`
+ * Credentials and Configuration object for Resume API. They can be overriden by prioriy: `credentials file` (credentials JSON file) &gt; `process.env.*` &gt; `default API values`
  * @summary Credentials object for Resume API, Automatically set by Resume Config.
  * @typedef ResumeCredentials
- * @property {string} [CREDENTIALS_FILE] path to credentials file - the overring steps are `process.env.CREDENTIALS_FILE` &gt; "credentials.json" by default. If file is not found, Resume Config will not override config by file (not raise error, only show warning).
- * @property {string} [host] full host path to Resume API - overriding step: "host" in credentials files &gt; `process.env.REST_HOST` &gt; "https://resume.sati.co.th" (default), respectively.
- * @property {string} [username] username for Resume API - default is from `process.env.REST_USER`.
- * @property {string} [password] password for Resume API - default is from `process.env.REST_PW`.
- * @property {string|int} [section_id_default] default Section ID, information for Resume API - default is from `process.env.REST_DEFAULT_SECTION` or 0, respectively.
- * @property {string[]} [lang] language hints must be BCP-47 language code in string type or array of string type ordered by highest priority to suggest the speech-to-text API - the default is located in `./public/lang.json` . See more detail of [BCP-47](https://github.com/libyal/libfwnt/wiki/Language-Code-identifiers) - default also can load from file in `lang_json` path &gt; JSON parse from `process.env.REST_LANG` &gt; API default config, respectively.
- * @property {string} [lang_json] path to lang.json, Please see example in [../public/lang.json](../public/lang.json), Default is `process.env.LANG_JSON` or "public/lang.json", respectively.
+ * @property {string} [CREDENTIALS_FILE] path to credentials JSON file. If file is not found, `ResumeCredentials` will not override config by credentials file (not raise error, only show warning). <br><br>  ***overriding step:*** `process.env.CREDENTIALS_FILE` &gt; `"credentials.json"` by default.
+ * @property {string} [host] full host path to Resume API <br><br>  ***overriding step:*** `"host"` in credentials files &gt; `process.env.REST_HOST` &gt; `"https://resume.sati.co.th"` (default).
+ * @property {string} [username] username for Resume API <br><br>  ***overriding step:*** `"username"` in credentials files &gt; `process.env.REST_USER`.
+ * @property {string} [password] password for Resume API <br><br>  ***overriding step:*** `"password"` in credentials files &gt; `process.env.REST_PW`.
+ * @property {string|int} [section_id_default] default Section ID, information for Resume API <br><br>  ***overriding step:*** `"section_id_default"` in credentials files &gt; `process.env.REST_DEFAULT_SECTION` &gt; `0`.
+ * @property {string} [lang_json] path to array of languages hint-storing JSON. If file is not found, `ResumeCredentials.lang` property will skip to next overriding step (not raise error, only show warning). Please see example in [../public/lang.json](../public/lang.json) <br><br>  ***overriding step:*** `process.env.LANG_JSON` &gt; `"public/lang.json"` (default), respectively.
+ * @property {string[]} [lang] language hints must be BCP-47 language code in string type or array of string type ordered by highest priority to suggest the speech-to-text API - the default is located in `./public/lang.json` . See more detail of [BCP-47](https://github.com/libyal/libfwnt/wiki/Language-Code-identifiers) <br><br>  ***overriding step:***  `"section_id_default"` in credentials files &gt; read JSON file at `this.lang_json` path &gt; `JSON.parse(process.env.REST_LANG)` &gt; Resume API default config.
  */
 
 var credentials = {
