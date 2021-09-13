@@ -82,6 +82,8 @@ const setCookie = require('set-cookie-parser');
 
 /**
  * Class for connect Resume API via HTTPS/1.1 REST API
+ * ***Note:*** the `HttpClient` object is totally stateless. Every method call, it ***always*** needs *session ID*, *section ID*, and *cookies* (for load balancer) to communication with correct session on Resume API.
+ * @summary  Class for connect Resume API via HTTPS/1.1 REST API
  */
 class ResumeHttpAPIClient {
 
