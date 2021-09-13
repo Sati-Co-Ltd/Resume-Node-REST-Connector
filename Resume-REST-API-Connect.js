@@ -92,8 +92,8 @@ class ResumeHttpAPIClient {
     /** 
      * Create ResumeHttpAPIClient
      * @param {string} [host] - full host path for Resume API (https://resume.sati.co.th)
-     * @param {string} [username] - API username if leave blank Resume will load from credentials.json or environmental variable by config.js
-     * @param {string} [password] - API password if leave blank Resume will load from credentials.json or environmental variable by config.js
+     * @param {string} [username] - Resume API username if leave blank, will load from ResumeCredentials
+     * @param {string} [password] - Resume API password if leave blank, will load from ResumeCredentials
      */
     constructor(host, username, password) {
         this.host = host || CONFIG.host;
@@ -134,7 +134,7 @@ class ResumeHttpAPIClient {
         });
     }
     /** 
-     * Test Resume API connection
+     * Test Resume API connection and Authenication
      * @returns {Promise<axios>} Promise.all() of axios object
      */
     test() {
