@@ -98,11 +98,22 @@ const HOST = "https://resume.sati.co.th";
 const USER = "USERNAME";
 const PW = "PASSWORD";
 
-restClient = new HttpClient(HOST, USER, PW);
+const restClient = new HttpClient(HOST, USER, PW);
 ```
 
 ### Request for new Session ID from Resume API
 ```JS
-
+restClient.newSession(sectionId, lang, hint, docFormat, multiSpeaker, userStartTime)
+    .then(res => {
+        var sessionID = res.data.session_id;
+        var pseudoIdentifier = res.data.pseudoIdentifier;
+        var cookies = res.cookies;
+    })
+    .catch(err => { /*  Error handling  */});
 ```
-***Note:*** the `HttpClient` object is totally stateless. Every method call, it ***always*** needs *session ID* and *section ID* to communication with correct session on Resume API.
+
+[HttpClient.newSession method](docs/Resume-REST-API-Connect.md)
+
+***Note:*** the `HttpClient` object is totally stateless. Every method call, it ***always*** needs *session ID*, *section ID*, and *cookies* (for load balancer) to communication with correct session on Resume API.
+
+### Push Sound Chunk to
