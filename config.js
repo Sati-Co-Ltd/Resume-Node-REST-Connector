@@ -10,7 +10,7 @@
 */
 
 /**
- * Credentials and Configuration object for Resume API. They can be overriden by prioriy: `credentials file` (credentials JSON file) &gt; `process.env.*` &gt; `default API values`
+ * Credentials and Configuration object for Resume API. They can be overriden by prioriy: `credentials file` (credentials JSON file) &gt; `process.env.*` &gt; `default API values`. The example of credentials file locate at [../credentials.template.json](credentials.template.json).
  * @summary Credentials object for Resume API, Automatically set by Resume Config.
  * @typedef ResumeCredentials
  * @property {string} [CREDENTIALS_FILE] path to credentials JSON file. If file is not found, `ResumeCredentials` will not override config by credentials file (not raise error, only show warning). <br><br>  ***overriding step:*** `process.env.CREDENTIALS_FILE` &gt; `"credentials.json"` by default.

@@ -7,7 +7,7 @@ Store configuration for Node.JS module for HTTPS RESTful Resume API Client
 <a name="module_config..ResumeCredentials"></a>
 
 ### config~ResumeCredentials
-Credentials and Configuration object for Resume API. They can be overriden by prioriy: `credentials file` (credentials JSON file) &gt; `process.env.*` &gt; `default API values`
+Credentials and Configuration object for Resume API. They can be overriden by prioriy: `credentials file` (credentials JSON file) &gt; `process.env.*` &gt; `default API values`. The example of credentials file locate at [../credentials.template.json](credentials.template.json).
 
 **Kind**: inner typedef of [<code>config</code>](#module_config)  
 **Summary**: Credentials object for Resume API, Automatically set by Resume Config.  
