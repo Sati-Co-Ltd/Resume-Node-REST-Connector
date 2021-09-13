@@ -202,7 +202,7 @@ class ResumeHttpAPIClient {
      * @param {ResumeSoundInfo} info sound chunk information for Resume API
      * @param {Blob} soundStream chunk of sound in WAV format
      * @param {string} cookies HTTP header-encoded cookies string from newSession return, important for Resume API server process
-     * @returns {Promise<ResumeSoundInfo>} Promise object of ResumeSoundInfo from Resume API
+     * @returns {Promise<Transcript>} Promise object of Transcript from Resume API
      */
     sendSound(sessionId, sectionID, info, soundStream, cookies) {
         console.log('Prepare to put sound');
@@ -249,7 +249,7 @@ class ResumeHttpAPIClient {
      * @param {string|int} sectionID ID of section e.g. department number, section of organization name
      * @param {Date} [lastUpdate] Last update datetime if user has caching.
      * @param {string} cookies  HTTP header-encoded cookies string from newSession return, important for Resume API server process
-     * @returns {Promise<ResumeSoundInfo>} Promise object of ResumeSoundInfo from Resume API, **null** if there is no new update for lastUpdate time.
+     * @returns {Promise<(Transcript|null)>} Promise object of Transcript from Resume API, **null** if there is no new update for lastUpdate time.
      */
     updateResult(sessionId, sectionID, lastUpdate, cookies) {
         return this.client.get("", {
