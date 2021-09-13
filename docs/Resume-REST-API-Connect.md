@@ -4,8 +4,8 @@ Node.JS module for HTTPS RESTful Resume API Client
 <a name="module_Resume-REST-API-Connect"></a>
 
 ## Resume-REST-API-Connect
-  
-   <!-- no toc -->
+
+<!-- no toc -->
 * [Resume-REST-API-Connect](#module_Resume-REST-API-Connect)
     * [~ResumeHttpAPIClient](#module_Resume-REST-API-Connect..ResumeHttpAPIClient)
         * [new ResumeHttpAPIClient([host], [username], [password])](#new_module_Resume-REST-API-Connect..ResumeHttpAPIClient_new)
@@ -13,8 +13,8 @@ Node.JS module for HTTPS RESTful Resume API Client
             * [.test()](#module_Resume-REST-API-Connect..ResumeHttpAPIClient+test) ⇒ <code>Promise.&lt;axios&gt;</code>
             * [.testAnonymous()](#module_Resume-REST-API-Connect..ResumeHttpAPIClient+testAnonymous) ⇒ <code>Promise.&lt;axios&gt;</code>
             * [.newSession()](#module_Resume-REST-API-Connect..ResumeHttpAPIClient+newSession) ⇒ <code>Promise.&lt;ResumeSessionResponse&gt;</code>
-            * [.sendSound(sessionId, sectionID, info, soundStream, cookies)](#module_Resume-REST-API-Connect..ResumeHttpAPIClient+sendSound) ⇒ <code>Promise.&lt;ResumeSoundInfo&gt;</code>
-            * [.updateResult(sessionId, sectionID, [lastUpdate], cookies)](#module_Resume-REST-API-Connect..ResumeHttpAPIClient+updateResult) ⇒ <code>Promise.&lt;ResumeSoundInfo&gt;</code>
+            * [.sendSound(sessionId, sectionID, info, soundStream, cookies)](#module_Resume-REST-API-Connect..ResumeHttpAPIClient+sendSound) ⇒ <code>Promise.&lt;Transcript&gt;</code>
+            * [.updateResult(sessionId, sectionID, [lastUpdate], cookies)](#module_Resume-REST-API-Connect..ResumeHttpAPIClient+updateResult) ⇒ <code>Promise.&lt;(Transcript\|null)&gt;</code>
         * _static_
             * [.responseResolve(res)](#module_Resume-REST-API-Connect..ResumeHttpAPIClient.responseResolve) ⇒ <code>ResumeSoundInfo</code>
     * [~ResumeNewSessionData](#module_Resume-REST-API-Connect..ResumeNewSessionData)
@@ -25,12 +25,12 @@ Node.JS module for HTTPS RESTful Resume API Client
 
 <a name="module_Resume-REST-API-Connect..ResumeHttpAPIClient"></a>
 
-### Resume-REST-API-Connect~ResumeHttpAPIClient
+### Resume-REST-API-Connect~ResumeHttpAPIClient  <br>
 ***Note:*** the `HttpClient` object is totally stateless. Every method call, it ***always*** needs *session ID*, *section ID*, and *cookies* (for load balancer) to communication with correct session on Resume API.
-
-**Kind**: inner class of [<code>Resume-REST-API-Connect</code>](#module_Resume-REST-API-Connect)
+  <br>
+**Kind**: inner class of [<code>Resume-REST-API-Connect</code>](#module_Resume-REST-API-Connect)  <br>
 **Summary**: Class for connect Resume API via HTTPS/1.1 REST API
-  
+
 <!-- no toc -->
 * [~ResumeHttpAPIClient](#module_Resume-REST-API-Connect..ResumeHttpAPIClient)
     * [new ResumeHttpAPIClient([host], [username], [password])](#new_module_Resume-REST-API-Connect..ResumeHttpAPIClient_new)
@@ -38,8 +38,8 @@ Node.JS module for HTTPS RESTful Resume API Client
         * [.test()](#module_Resume-REST-API-Connect..ResumeHttpAPIClient+test) ⇒ <code>Promise.&lt;axios&gt;</code>
         * [.testAnonymous()](#module_Resume-REST-API-Connect..ResumeHttpAPIClient+testAnonymous) ⇒ <code>Promise.&lt;axios&gt;</code>
         * [.newSession()](#module_Resume-REST-API-Connect..ResumeHttpAPIClient+newSession) ⇒ <code>Promise.&lt;ResumeSessionResponse&gt;</code>
-        * [.sendSound(sessionId, sectionID, info, soundStream, cookies)](#module_Resume-REST-API-Connect..ResumeHttpAPIClient+sendSound) ⇒ <code>Promise.&lt;ResumeSoundInfo&gt;</code>
-        * [.updateResult(sessionId, sectionID, [lastUpdate], cookies)](#module_Resume-REST-API-Connect..ResumeHttpAPIClient+updateResult) ⇒ <code>Promise.&lt;ResumeSoundInfo&gt;</code>
+        * [.sendSound(sessionId, sectionID, info, soundStream, cookies)](#module_Resume-REST-API-Connect..ResumeHttpAPIClient+sendSound) ⇒ <code>Promise.&lt;Transcript&gt;</code>
+        * [.updateResult(sessionId, sectionID, [lastUpdate], cookies)](#module_Resume-REST-API-Connect..ResumeHttpAPIClient+updateResult) ⇒ <code>Promise.&lt;(Transcript\|null)&gt;</code>
     * _static_
         * [.responseResolve(res)](#module_Resume-REST-API-Connect..ResumeHttpAPIClient.responseResolve) ⇒ <code>ResumeSoundInfo</code>
 
@@ -52,30 +52,30 @@ Create ResumeHttpAPIClient
 | Param | Type | Description |
 | --- | --- | --- |
 | [host] | <code>string</code> | full host path for Resume API (https://resume.sati.co.th) |
-| [username] | <code>string</code> | API username if leave blank Resume will load from credentials.json or environmental variable by config.js |
-| [password] | <code>string</code> | API password if leave blank Resume will load from credentials.json or environmental variable by config.js |
+| [username] | <code>string</code> | Resume API username if leave blank, will load from [ResumeCredentials](config.md) |
+| [password] | <code>string</code> | Resume API password if leave blank, will load from [ResumeCredentials](config.md) |
 
 <a name="module_Resume-REST-API-Connect..ResumeHttpAPIClient+test"></a>
 
 #### resumeHttpAPIClient.test() ⇒ <code>Promise.&lt;axios&gt;</code>
-Test Resume API connection
-
-**Kind**: instance method of [<code>ResumeHttpAPIClient</code>](#module_Resume-REST-API-Connect..ResumeHttpAPIClient)
+Test Resume API connection and Authenication
+  <br>
+**Kind**: instance method of [<code>ResumeHttpAPIClient</code>](#module_Resume-REST-API-Connect..ResumeHttpAPIClient)  <br>
 **Returns**: <code>Promise.&lt;axios&gt;</code> - Promise.all() of axios object
 <a name="module_Resume-REST-API-Connect..ResumeHttpAPIClient+testAnonymous"></a>
 
 #### resumeHttpAPIClient.testAnonymous() ⇒ <code>Promise.&lt;axios&gt;</code>
 Test Resume API connection without username and password
-
-**Kind**: instance method of [<code>ResumeHttpAPIClient</code>](#module_Resume-REST-API-Connect..ResumeHttpAPIClient)
+  <br>
+**Kind**: instance method of [<code>ResumeHttpAPIClient</code>](#module_Resume-REST-API-Connect..ResumeHttpAPIClient)  <br>
 **Returns**: <code>Promise.&lt;axios&gt;</code> - Promise of axios object
 <a name="module_Resume-REST-API-Connect..ResumeHttpAPIClient+newSession"></a>
 
 #### resumeHttpAPIClient.newSession() ⇒ <code>Promise.&lt;ResumeSessionResponse&gt;</code>
 Request new Resume Transcript Session from Resume API.
-
-**Kind**: instance method of [<code>ResumeHttpAPIClient</code>](#module_Resume-REST-API-Connect..ResumeHttpAPIClient)
-**Returns**: <code>Promise.&lt;ResumeSessionResponse&gt;</code> - Promise object of Session ID
+  <br>
+**Kind**: instance method of [<code>ResumeHttpAPIClient</code>](#module_Resume-REST-API-Connect..ResumeHttpAPIClient)  <br>
+**Returns**: <code>Promise.&lt;ResumeSessionResponse&gt;</code> - Promise object of Session ID  <br>
 **Properties**
 
 | Name | Type | Description |
@@ -88,11 +88,11 @@ Request new Resume Transcript Session from Resume API.
 
 <a name="module_Resume-REST-API-Connect..ResumeHttpAPIClient+sendSound"></a>
 
-#### resumeHttpAPIClient.sendSound(sessionId, sectionID, info, soundStream, cookies) ⇒ <code>Promise.&lt;ResumeSoundInfo&gt;</code>
+#### resumeHttpAPIClient.sendSound(sessionId, sectionID, info, soundStream, cookies) ⇒ <code>Promise.&lt;Transcript&gt;</code>
 Send sound chunk to Resume API
-
-**Kind**: instance method of [<code>ResumeHttpAPIClient</code>](#module_Resume-REST-API-Connect..ResumeHttpAPIClient)
-**Returns**: <code>Promise.&lt;ResumeSoundInfo&gt;</code> - Promise object of ResumeSoundInfo from Resume API
+  <br>
+**Kind**: instance method of [<code>ResumeHttpAPIClient</code>](#module_Resume-REST-API-Connect..ResumeHttpAPIClient)  <br>
+**Returns**: <code>Promise.&lt;Transcript&gt;</code> - Promise object of Transcript from Resume API
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -104,11 +104,11 @@ Send sound chunk to Resume API
 
 <a name="module_Resume-REST-API-Connect..ResumeHttpAPIClient+updateResult"></a>
 
-#### resumeHttpAPIClient.updateResult(sessionId, sectionID, [lastUpdate], cookies) ⇒ <code>Promise.&lt;ResumeSoundInfo&gt;</code>
+#### resumeHttpAPIClient.updateResult(sessionId, sectionID, [lastUpdate], cookies) ⇒ <code>Promise.&lt;(Transcript\|null)&gt;</code>
 Request for Resume API transcription result
-
-**Kind**: instance method of [<code>ResumeHttpAPIClient</code>](#module_Resume-REST-API-Connect..ResumeHttpAPIClient)
-**Returns**: <code>Promise.&lt;ResumeSoundInfo&gt;</code> - Promise object of ResumeSoundInfo from Resume API, **null** if there is no new update for lastUpdate time.      
+  <br>
+**Kind**: instance method of [<code>ResumeHttpAPIClient</code>](#module_Resume-REST-API-Connect..ResumeHttpAPIClient)  <br>
+**Returns**: <code>Promise.&lt;(Transcript\|null)&gt;</code> - Promise object of Transcript from Resume API, **null** if there is no new update for lastUpdate time.        
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -121,8 +121,8 @@ Request for Resume API transcription result
 
 #### ResumeHttpAPIClient.responseResolve(res) ⇒ <code>ResumeSoundInfo</code>
 Process Response from Resume HTTP REST API
-
-**Kind**: static method of [<code>ResumeHttpAPIClient</code>](#module_Resume-REST-API-Connect..ResumeHttpAPIClient)
+  <br>
+**Kind**: static method of [<code>ResumeHttpAPIClient</code>](#module_Resume-REST-API-Connect..ResumeHttpAPIClient)  <br>
 **Returns**: <code>ResumeSoundInfo</code> - response from Resume API
 
 | Param | Type | Description |
@@ -133,8 +133,8 @@ Process Response from Resume HTTP REST API
 
 ### Resume-REST-API-Connect~ResumeNewSessionData
 Response data in ResumeSessionResponse
-
-**Kind**: inner typedef of [<code>Resume-REST-API-Connect</code>](#module_Resume-REST-API-Connect)
+  <br>
+**Kind**: inner typedef of [<code>Resume-REST-API-Connect</code>](#module_Resume-REST-API-Connect)  <br>
 **Properties**
 
 | Name | Type | Description |
@@ -146,15 +146,15 @@ Response data in ResumeSessionResponse
 
 ### Resume-REST-API-Connect~GroupText : <code>Object.&lt;string, Array.&lt;string&gt;&gt;</code>
 Object contains keys - part of document following Terminology of "C-CDA 1.1.0 on FHIR resource profile" (see README.md), and values - array of sentences or pharse (join into one string). `{"problem_section":["This is sentence one.","more pharse here..."]}`
-
-**Kind**: inner typedef of [<code>Resume-REST-API-Connect</code>](#module_Resume-REST-API-Connect)
+  <br>
+**Kind**: inner typedef of [<code>Resume-REST-API-Connect</code>](#module_Resume-REST-API-Connect)  <br>
 **Summary**: Object contains keys - part of document (as C-CDA on FHIR), and values - array of string.
 <a name="module_Resume-REST-API-Connect..Transcript"></a>
 
 ### Resume-REST-API-Connect~Transcript : <code>object</code>
 Transcript response of sent sound from Resume API
-
-**Kind**: inner typedef of [<code>Resume-REST-API-Connect</code>](#module_Resume-REST-API-Connect)
+  <br>
+**Kind**: inner typedef of [<code>Resume-REST-API-Connect</code>](#module_Resume-REST-API-Connect)  <br>
 **Properties**
 
 | Name | Type | Description |
@@ -169,8 +169,8 @@ Transcript response of sent sound from Resume API
 
 ### Resume-REST-API-Connect~ResumeSoundInfo : <code>object</code>
 Main format for sound chunk request and Transcript response of sent sound from Resume API
-
-**Kind**: inner typedef of [<code>Resume-REST-API-Connect</code>](#module_Resume-REST-API-Connect)
+  <br>
+**Kind**: inner typedef of [<code>Resume-REST-API-Connect</code>](#module_Resume-REST-API-Connect)  <br>
 **Properties**
 
 | Name | Type | Description |
@@ -186,8 +186,8 @@ Main format for sound chunk request and Transcript response of sent sound from R
 
 ### Resume-REST-API-Connect~ResumeSessionResponse
 Returns from newSession method
-
-**Kind**: inner typedef of [<code>Resume-REST-API-Connect</code>](#module_Resume-REST-API-Connect)
+  <br>
+**Kind**: inner typedef of [<code>Resume-REST-API-Connect</code>](#module_Resume-REST-API-Connect)  <br>
 **Properties**
 
 | Name | Type | Description |
@@ -197,7 +197,7 @@ Returns from newSession method
 | clientStartTime | <code>Date</code> | time that function called in server-sided Node.JS (client of API) |
 | userStartTime | <code>Date</code> | time that user (client-sided JavaScript) requests new Resume Session ID |
 | [pseudoIdentifier] | <code>string</code> | fake (pseudo) identifier generated by Resume REST API Client and sent to server |
-| cookies | <code>string</code> | HTTP header-encoded cookies string that Resume API responses. It must be included in consequenct resquest in same Session ID. Because it is important for API server routing. |  
+| cookies | <code>string</code> | HTTP header-encoded cookies string that Resume API responses. It must be included in consequenct resquest in same Session ID. Because it is important for API server routing. |
   
 -------
 &copy; 2021 - copyright by Tanapat Kahabodeekanokkul - the founder of `RESUME`.
