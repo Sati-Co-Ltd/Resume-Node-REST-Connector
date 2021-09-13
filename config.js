@@ -10,20 +10,21 @@
 */
 
 /**
- * Credentials object for Resume API
+ * Credentials and Configuration object for Resume API. They can be overriden by prioriy: `credentials file` &gt; `process.env.*` &gt; `default API values`
+ * @summary Credentials object for Resume API, Automatically set by Resume Config.
  * @typedef ResumeCredentials
- * @property {string} [CREDENTIALS_FILE] path to credentials file - default is from `process.env.CREDENTIALS_FILE` or "credentials.json".
- * @property {string} [host] full host path to Resume API - default is from `process.env.REST_HOST`.
+ * @property {string} [CREDENTIALS_FILE] path to credentials file - the overring steps are `process.env.CREDENTIALS_FILE` &gt; "credentials.json" by default. If file is not found, Resume Config will not override config by file (not raise error, only show warning).
+ * @property {string} [host] full host path to Resume API - overriding step: "host" in credentials files &gt; `process.env.REST_HOST` &gt; "https://resume.sati.co.th" (default), respectively.
  * @property {string} [username] username for Resume API - default is from `process.env.REST_USER`.
  * @property {string} [password] password for Resume API - default is from `process.env.REST_PW`.
- * @property {string|int} [section_id_default] default Section ID, information for Resume API - default is from `process.env.REST_DEFAULT_SECTION` or 0.
- * @property {string[]} [lang] language hints must be BCP-47 language code in string type or array of string type ordered by highest priority to suggest the speech-to-text API - the default is located in `./public/lang.json` . See more detail of [BCP-47](https://github.com/libyal/libfwnt/wiki/Language-Code-identifiers) - default also can load from `process.env.LANG_JSON` path or `process.env.REST_LANG` environment variable.
- * @property {string} [lang_json] path to lang.json, Please see example in [../public/lang.json](../public/lang.json), Default is `process.env.LANG_JSON` or "public/lang.json".
+ * @property {string|int} [section_id_default] default Section ID, information for Resume API - default is from `process.env.REST_DEFAULT_SECTION` or 0, respectively.
+ * @property {string[]} [lang] language hints must be BCP-47 language code in string type or array of string type ordered by highest priority to suggest the speech-to-text API - the default is located in `./public/lang.json` . See more detail of [BCP-47](https://github.com/libyal/libfwnt/wiki/Language-Code-identifiers) - default also can load from file in `lang_json` path &gt; JSON parse from `process.env.REST_LANG` &gt; API default config, respectively.
+ * @property {string} [lang_json] path to lang.json, Please see example in [../public/lang.json](../public/lang.json), Default is `process.env.LANG_JSON` or "public/lang.json", respectively.
  */
 
 var credentials = {
     "CREDENTIALS_FILE": process.env.CREDENTIALS_FILE || "credentials.json",
-    "host": process.env.REST_HOST || "",
+    "host": process.env.REST_HOST || "https://resume.sati.co.th",
     "username": process.env.REST_USER || "",
     "password": process.env.REST_PW || "",
     "section_id_default": process.env.REST_DEFAULT_SECTION || 0,
