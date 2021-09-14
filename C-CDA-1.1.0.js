@@ -1,4 +1,10 @@
 /**
+ * @module C-CDA-1-1-0
+ */
+
+// http://www.hl7.org/fhir/us/ccda/artifacts.html
+
+/**
  * @typedef {import('./ResumeCommonFormat').GroupText} GroupText
  */
 
