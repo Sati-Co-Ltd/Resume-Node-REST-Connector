@@ -42,7 +42,7 @@ class ResumeHttpAPIClient {
      * @param {string} [host] - full host path for Resume API (https://resume.sati.co.th)
      * @param {string} [username] - Resume API username if leave blank, will load from ResumeCredentials
      * @param {string} [password] - Resume API password if leave blank, will load from ResumeCredentials
-     * @param {*} [option] - Options
+     * @param {ResumeClientOption} [option] - Options
      */
     constructor(host, username, password, option) {
         // set up log
