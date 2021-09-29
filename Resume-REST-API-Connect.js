@@ -60,12 +60,13 @@ class ResumeHttpAPIClient {
             //scope: 'baz'
         });
 
-        this.logger.info('Resume Connector constructor', {
+        this.logger.info({
             className: this.constructor.name,
             host: this.host,
             configUsername: CONFIG.username,
             overridenUsername: username
-        });
+        },
+            'Resume Connector constructor');
 
         //NODE_ENV
         let agent = { baseURL: this.host };
@@ -103,10 +104,10 @@ class ResumeHttpAPIClient {
     test() {
         return Promise.all([this.client.get('test'), this.client.get('user')])
             .then((res) => {
-                res.forEach((v, k) => this.info('Test user connection', { id: k, "response": v.data }));
+                res.forEach((v, k) => this.logger.info({ id: k, "response": v.data }, 'Test user connection'));
                 return res;
             })
-            .catch(err => this.err('Fail Test connection', err));
+            .catch(err => this.logger.error(err, 'Fail Test user connection'));
     }
     /** 
      * Test Resume API connection without username and password
@@ -114,8 +115,8 @@ class ResumeHttpAPIClient {
      */
     testAnonymous() {
         return axios.get(new URL("test", this.host).toString())
-            .then((res) => this.info('Test connection', { "response": v.data }))
-            .catch(err => this.err('Fail Test connection', err));
+            .then((res) => this.logger.info({ "response": res.data }, 'Test connection'))
+            .catch(err => this.logger.error(err, 'Fail Test connection'));
     }
     /** 
      * Request new Resume Transcript Session from Resume API.
@@ -145,10 +146,10 @@ class ResumeHttpAPIClient {
             identifier: pseudoIden
         };
 
-        this.logger.info('Client: create new session', {
+        this.logger.info({
             className: this.constructor.name,
             ...params
-        });
+        }, 'Client: create new session');
 
         // create promist and send to server 
         return this.client.post("", params).then((res) => {
@@ -160,16 +161,16 @@ class ResumeHttpAPIClient {
                 userStartTime: userStartTime,
                 pseudoIdentifier: pseudoIden,
                 cookies: setCookie.parse(res, { decodeValues: false }).map((cookie) => {
-                    this.logger.debug('Client: new session, received cookie', { cookie: cookie });
+                    this.logger.debug({ cookie: cookie }, 'Client: new session, received cookie');
                     return cookie.name + '=' + cookie.value
                 }).join('; ')
             };
 
-            this.logger.info('Client: received new session', {
+            this.logger.info({
                 className: this.constructor.name,
                 ...params,
                 ...response
-            });
+            }, 'Client: received new session');
             return response;
         });
     }
@@ -212,14 +213,14 @@ class ResumeHttpAPIClient {
         //console.log('Append wav:: ' + form.getBuffer().length);
         //console.log('Headers ' + JSON.stringify(form.getHeaders()));
 
-        this.logger.info('Client: send sound to API',
+        this.logger.info(
             {
                 session_id: sessionId,
                 section_id: sectionID || CONFIG.section_id_default,
                 info: infoSubmit,
                 wav: soundStream ? soundStream.length : null,
                 Cookie: cookies
-            });
+            }, 'Client: send sound to API');
 
         //console.log('Put sound', session_id);
         return this.client.put("",
@@ -246,11 +247,11 @@ class ResumeHttpAPIClient {
             section_id: sectionID,
             last_update: lastUpdate || 0
         }
-        this.logger.info('Client: update result from API',
+        this.logger.info(
             {
                 ...params,
                 ...cookies
-            });
+            }, 'Client: update result from API');
 
         return this.client.get("", {
             params: params,
@@ -266,7 +267,7 @@ class ResumeHttpAPIClient {
      * @returns {ResumeCommonFormat.ResumeSoundInfo} response from Resume API
      */
     static responseResolve(res) {
-        this.logger.debug('Response result :: new set-cookie:', { cookies: setCookie.parse(res) });
+        this.logger.debug({ cookies: setCookie.parse(res) }, 'responseResolve :: new set-cookie:');
         return res.data;
     }
 
