@@ -34,36 +34,39 @@ var credentials = {
 
 const fs = require('fs');
 const path = require('path');
+const pino = require('pino');
+let logger = pino(pino.destination({ sync: false })).child({ module: 'ResumeAPIConnector.Config' });
+
 try {
     if (credentials.CREDENTIALS_FILE) {
         let cred = path.resolve(process.cwd(), credentials.CREDENTIALS_FILE);
         if (fs.existsSync(cred)) {
-            console.log('Load Credentials file');
+            logger.info(credentials, 'Load credentials file');
             let load = JSON.parse(fs.readFileSync(cred, 'utf-8'));
             credentials = {
                 ...credentials,
                 ...load
             };
         } else {
-            console.warn('Credentials file: ', cred, ' not found. Use config from default or process.env.');
+            logger.warn(credentials, 'Credentials file ' + cred + ' not found. Use config from default or process.env.');
         }
     } else {
-        console.info('Credentials file is blank. Use config from default or process.env.');
+        logger.info(credentials, 'Credentials file is blank. Use config from default or process.env.');
     }
     if (!credentials.lang) {
         let lang_json = path.resolve(process.cwd(), credentials.lang_json);
         if (fs.existsSync(lang_json)) {
-            console.log('Read language JSON from ', lang_json);
+            logger.info('Read language JSON from ' + lang_json);
             credentials.lang = JSON.parse(fs.readFileSync(lang_json));
         } else if (process.env.REST_LANG) {
-            console.log('Parse JSON of language list from environmental variable: ', process.env.REST_LANG);
+            logger.info('Parse JSON of language list from environmental variable: ' + process.env.REST_LANG);
             credentials.lang = JSON.parse(process.env.REST_LANG);
         } else {
-            console.warn('Both language JSON file ', lang_json, ' and REST_LANG ', process.env.REST_LANG, ' are blank. Use default API configuration.')
+            logger.warn('Both language JSON file ' + lang_json + ' and REST_LANG ' + process.env.REST_LANG + ' are blank. Use default API configuration.')
         }
     }
 } catch (e) {
-    console.error(e);
+    logger.error(e);
 }
 
 
