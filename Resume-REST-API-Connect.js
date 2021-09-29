@@ -21,7 +21,12 @@ const axiosRetry = require('axios-retry');
 const tokenProvider = require('axios-token-interceptor');
 const FormData = require('form-data');
 const setCookie = require('set-cookie-parser');
+const pino = require('pino');
 
+/**
+ * @typedef {Object} ResumeClientOption
+ * @property {Object} [log] - inherited properties to child logger
+ */
 
 /**
  * Class for connect Resume API via HTTPS/1.1 REST API
@@ -37,8 +42,13 @@ class ResumeHttpAPIClient {
      * @param {string} [host] - full host path for Resume API (https://resume.sati.co.th)
      * @param {string} [username] - Resume API username if leave blank, will load from ResumeCredentials
      * @param {string} [password] - Resume API password if leave blank, will load from ResumeCredentials
+     * @param {*} [option] - Options
      */
-    constructor(host, username, password) {
+    constructor(host, username, password, option) {
+        // set up log
+        let logChild = (option && option.log) ? option.log : {}
+        this.logger = pino(pino.destination({ sync: false })).child(logChild);
+
         this.host = host || CONFIG.host;
         this.credentials = oauth.client(axios.create(), {
             url: new URL("/auth/token", this.host).toString(),
@@ -49,6 +59,15 @@ class ResumeHttpAPIClient {
             password: password || CONFIG.password,
             //scope: 'baz'
         });
+
+        this.logger.info({
+            className: this.constructor.name,
+            host: this.host,
+            configUsername: CONFIG.username,
+            overridenUsername: username
+        },
+            'Resume Connector constructor');
+
         //NODE_ENV
         let agent = { baseURL: this.host };
         if (this.host.indexOf('https://') == 0) {
@@ -60,8 +79,10 @@ class ResumeHttpAPIClient {
             }
             agent.withCredentials = true;
         }
+
         this.client = axios.create(agent);
         this.client.interceptors.request.use(oauth.interceptor(tokenProvider, this.credentials));
+
         axiosRetry(this.client, {
             retries: 100,
             retryCondition: function (error) {
@@ -83,10 +104,10 @@ class ResumeHttpAPIClient {
     test() {
         return Promise.all([this.client.get('test'), this.client.get('user')])
             .then((res) => {
-                res.forEach((v, k) => console.log('Test connection', k, "Response:\n", v.data));
+                res.forEach((v, k) => this.logger.info({ id: k, "response": v.data }, 'Test user connection'));
                 return res;
             })
-            .catch(err => console.log('Fail Test connection', err));
+            .catch(err => this.logger.error(err, 'Fail Test user connection'));
     }
     /** 
      * Test Resume API connection without username and password
@@ -94,8 +115,8 @@ class ResumeHttpAPIClient {
      */
     testAnonymous() {
         return axios.get(new URL("test", this.host).toString())
-            .then((res) => console.log('Test connection', "Response:\n", res.data))
-            .catch(err => console.log('Fail Test connection', err));
+            .then((res) => this.logger.info({ "response": res.data }, 'Test connection'))
+            .catch(err => this.logger.error(err, 'Fail Test connection'));
     }
     /** 
      * Request new Resume Transcript Session from Resume API.
@@ -113,31 +134,45 @@ class ResumeHttpAPIClient {
         let time = Date.now();
         let pseudoIden = (time.toString(36) + Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2)).substr(0, 32);
 
+
+        let params = {
+            section_id: sectionID || CONFIG.section_id_default,
+            lang: lang || CONFIG.lang,
+            hint: hint || null,
+            multi_speaker: multiSpeaker || false,
+            doc_format: docFormat || null,
+            user_start_time: new Date(userStartTime).toJSON(),
+            client_start_time: new Date(time).toJSON(),
+            identifier: pseudoIden
+        };
+
+        this.logger.info({
+            className: this.constructor.name,
+            ...params
+        }, 'Client: create new session');
+
         // create promist and send to server 
-        return this.client.post("",
-            {
-                section_id: sectionID || CONFIG.section_id_default,
-                lang: lang || CONFIG.lang,
-                hint: hint || null,
-                multi_speaker: multiSpeaker || false,
-                doc_format: docFormat || null,
-                user_start_time: new Date(userStartTime).toJSON(),
-                client_start_time: new Date(time).toJSON(),
-                identifier: pseudoIden
-            }).then((res) => {
-                // Read cookie
-                return {
-                    status: res.status,
-                    data: res.data,
-                    clientStartTime: time,
-                    userStartTime: userStartTime,
-                    pseudoIdentifier: pseudoIden,
-                    cookies: setCookie.parse(res, { decodeValues: false }).map((cookie) => {
-                        console.log('Cookie:', JSON.stringify(cookie));
-                        return cookie.name + '=' + cookie.value
-                    }).join('; ')
-                };
-            });
+        return this.client.post("", params).then((res) => {
+            // Read cookie
+            let response = {
+                status: res.status,
+                data: res.data,
+                clientStartTime: time,
+                userStartTime: userStartTime,
+                pseudoIdentifier: pseudoIden,
+                cookies: setCookie.parse(res, { decodeValues: false }).map((cookie) => {
+                    this.logger.debug({ cookie: cookie }, 'Client: new session, received cookie');
+                    return cookie.name + '=' + cookie.value
+                }).join('; ')
+            };
+
+            this.logger.info({
+                className: this.constructor.name,
+                ...params,
+                ...response
+            }, 'Client: received new session');
+            return response;
+        });
     }
 
 
@@ -178,6 +213,15 @@ class ResumeHttpAPIClient {
         //console.log('Append wav:: ' + form.getBuffer().length);
         //console.log('Headers ' + JSON.stringify(form.getHeaders()));
 
+        this.logger.info(
+            {
+                session_id: sessionId,
+                section_id: sectionID || CONFIG.section_id_default,
+                info: infoSubmit,
+                wav: soundStream ? soundStream.length : null,
+                Cookie: cookies
+            }, 'Client: send sound to API');
+
         //console.log('Put sound', session_id);
         return this.client.put("",
             form.getBuffer(), {
@@ -198,14 +242,21 @@ class ResumeHttpAPIClient {
      * @returns {Promise<(ResumeCommonFormat.Transcript|null)>} Promise object of Transcript from Resume API, **null** if there is no new update for lastUpdate time.
      */
     updateResult(sessionId, sectionID, lastUpdate, cookies) {
+        let params = {
+            session_id: sessionId,
+            section_id: sectionID,
+            last_update: lastUpdate || 0
+        }
+        this.logger.info(
+            {
+                ...params,
+                ...cookies
+            }, 'Client: update result from API');
+
         return this.client.get("", {
-            params: {
-                session_id: sessionId,
-                section_id: sectionID,
-                last_update: lastUpdate || 0
-            },
+            params: params,
             headers: {
-                Cookies: cookies
+                Cookie: cookies
             }
         }).then(ResumeHttpAPIClient.responseResolve);
     }
@@ -216,7 +267,7 @@ class ResumeHttpAPIClient {
      * @returns {ResumeCommonFormat.ResumeSoundInfo} response from Resume API
      */
     static responseResolve(res) {
-        console.log('Response result :: new set-cookie:', setCookie.parse(res));
+        this.logger.debug({ cookies: setCookie.parse(res) }, 'responseResolve :: new set-cookie:');
         return res.data;
     }
 
