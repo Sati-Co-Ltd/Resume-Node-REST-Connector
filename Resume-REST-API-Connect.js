@@ -229,7 +229,7 @@ class ResumeHttpAPIClient {
                 ...form.getHeaders(),
                 Cookie: cookies
             }
-        }).then(ResumeHttpAPIClient.responseResolve);
+        }).then(res => ResumeHttpAPIClient.responseResolve(res, logger));
 
     }
 
@@ -253,12 +253,13 @@ class ResumeHttpAPIClient {
                 ...cookies
             }, 'Client: update result from API');
 
+        let logger = this.logger;
         return this.client.get("", {
             params: params,
             headers: {
                 Cookie: cookies
             }
-        }).then(ResumeHttpAPIClient.responseResolve);
+        }).then(res => ResumeHttpAPIClient.responseResolve(res, logger));
     }
 
     /**
@@ -266,8 +267,11 @@ class ResumeHttpAPIClient {
      * @param {AxiosResponse} res AxiosResponse object
      * @returns {ResumeCommonFormat.ResumeSoundInfo} response from Resume API
      */
-    static responseResolve(res) {
-        this.logger.debug({ cookies: setCookie.parse(res) }, 'responseResolve :: new set-cookie:');
+    static responseResolve(res, logger) {
+        if (!logger) {
+            logger = console.debug;
+        }
+        logger.debug({ cookies: setCookie.parse(res) }, 'responseResolve :: new set-cookie:');
         return res.data;
     }
 
