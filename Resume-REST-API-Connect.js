@@ -223,6 +223,7 @@ class ResumeHttpAPIClient {
             }, 'Client: send sound to API');
 
         //console.log('Put sound', session_id);
+        let logger = this.logger;
         return this.client.put("",
             form.getBuffer(), {
             headers: {
