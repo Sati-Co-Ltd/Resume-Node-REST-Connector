@@ -41,17 +41,17 @@ try {
     if (credentials.CREDENTIALS_FILE) {
         let cred = path.resolve(process.cwd(), credentials.CREDENTIALS_FILE);
         if (fs.existsSync(cred)) {
-            logger.info(credentials, 'Load credentials file');
+            logger.info('Load credentials file');
             let load = JSON.parse(fs.readFileSync(cred, 'utf-8'));
             credentials = {
                 ...credentials,
                 ...load
             };
         } else {
-            logger.warn(credentials, 'Credentials file ' + cred + ' not found. Use config from default or process.env.');
+            logger.warn('Credentials file ' + cred + ' not found. Use config from default or process.env.');
         }
     } else {
-        logger.info(credentials, 'Credentials file is blank. Use config from default or process.env.');
+        logger.info('Credentials file is blank. Use config from default or process.env.');
     }
     if (!credentials.lang) {
         let lang_json = path.resolve(process.cwd(), credentials.lang_json);
