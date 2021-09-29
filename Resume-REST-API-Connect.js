@@ -24,8 +24,8 @@ const setCookie = require('set-cookie-parser');
 const pino = require('pino');
 
 /**
- * @typedef {Object} ResumeClientOption
- * @property {Object} [log] - inherited properties to child logger
+ * @typedef {object} ResumeClientOption
+ * @property {object} [log] - inherited properties to child logger
  */
 
 /**
