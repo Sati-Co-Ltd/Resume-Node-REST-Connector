@@ -46,8 +46,8 @@ class ResumeHttpAPIClient {
      */
     constructor(host, username, password, option) {
         // set up log
-        let logChild = (option && option.log) ? option.log : {}
-        this.logger = pino(pino.destination({ sync: false })).child(logChild);
+        this.logger = pino(pino.destination({ sync: false }))
+            .child(((option && option.log) ? option.log : {}));
 
         this.host = host || CONFIG.host;
         this.credentials = oauth.client(axios.create(), {
