@@ -186,7 +186,7 @@ class ResumeHttpAPIClient {
      * @returns {Promise<ResumeCommonFormat.Transcript>} Promise object of Transcript from Resume API
      */
     sendSound(sessionId, sectionID, info, soundStream, cookies) {
-        console.log('Prepare to put sound');
+        // console.log('Prepare to put sound');
 
         var form = new FormData({ maxDataSize: 10500000 }); // 10 MB
         form.append("session_id", sessionId);
