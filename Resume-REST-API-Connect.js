@@ -250,7 +250,7 @@ class ResumeHttpAPIClient {
         this.logger.info(
             {
                 ...params,
-                ...cookies
+                Cookie: cookies
             }, 'Client: update result from API');
 
         return this.client.get("", {
