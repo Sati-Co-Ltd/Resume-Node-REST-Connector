@@ -1,6 +1,6 @@
 {
   "name": "resume-node-rest-connector",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Resume API Connector for Node.JS (sati.co.th)",
   "scripts": {
     "test": "node test/connect.js"
