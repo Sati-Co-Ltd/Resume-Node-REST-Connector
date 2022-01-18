@@ -173,7 +173,7 @@ general_status_section | General Status, General Appearance, GA | physical_exam_
 physical_exam_section | Physical Exam, PE | | 
 problem_section | Problem list, Diagnosis, ICD-10 | | 
 assessment_section | Assessment, Progression | problem_section | 
-results_section | Lab, Imaging, X-Rays, Diagnostic Test, Diagnostic procedure | | 
+results_section | Lab, Imaging, X-Rays, Investigation, Diagnostic Test, Diagnostic procedure | | 
 plan_of_treatment_section | Plan, Treatment, Plan of procedure | | 
 discharge_medications_section | Home Medication, Home Med, HM, Rx | plan_of_treatment_section | *Not in C-CDA*
 follow_up_section | Follow up, Appointment, F/U | plan_of_treatment_section | *Not in C-CDA*
@@ -184,7 +184,10 @@ follow_up_section | Follow up, Appointment, F/U | plan_of_treatment_section | *N
 Fields | User interface | Alternative UI | Description 
 ---|---|---|---
 reason_for_visit_section  | Reason for visit   |  |  
-triage_section | Triage | | *Not in C-CDA* for ED
+triage_section | Triage | | *Not in C-CDA* for ED (ER)
+past_medical_history_section_growth_and_development | Growth and development | | *Sub field* of past_medical_history_section
+
+
   
 **Reference**:
 - http://hl7.org/fhir/us/ccda/StructureDefinition-History-and-Physical.html
