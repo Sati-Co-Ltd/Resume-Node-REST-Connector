@@ -159,12 +159,13 @@ let tag = 'other_doctor_note';
 
 Fields | User interface | Alternative UI | Description 
 ---|---|---|---
-chief_complaint_section | Chief complaint, CC  | |
+chief_complaint_section | Chief complaint, CC  | | Chief complaint 
 history_of_present_illness_section | Present Illness, PI |  | 
 past_medical_history_section | Past History, Past Illness, PH, PHx, Medical/Trauma history | |
 procedures_section | History of Procedure, Surgical history, Obsteric/Gynecologic history | past_medical_history_section | | 
 medications_section | Current Medication, History of medication | past_medical_history_section | |
-allergies_and_intolerances_section | Allergy, Adverse reaction, Intolerance, Sensitivity | past_md
+allergies_and_intolerances_section | Allergy, Adverse reaction, Intolerance, Sensitivity | | 
+family_history_section | Family history, FamHx, FH, FHx | | 
 social_history_section | Social history, Social and Personal history | | Include alcohol, smoking, and substance use
 immunizations_section | Vaccination, Vaccine history, Immunization | past_medical_history_section | 
 review_of_systems_section | Review of System, Systematic Reviews | | 
@@ -177,15 +178,16 @@ results_section | Lab, Imaging, X-Rays, Investigation, Diagnostic Test, Diagnost
 plan_of_treatment_section | Plan, Treatment, Plan of procedure | | 
 discharge_medications_section | Home Medication, Home Med, HM, Rx | plan_of_treatment_section | *Not in C-CDA*
 follow_up_section | Follow up, Appointment, F/U | plan_of_treatment_section | *Not in C-CDA*
-
+other | other, note |  | *Not in C-CDA* Other note
 
 **Extended fields**  
 
 Fields | User interface | Alternative UI | Description 
 ---|---|---|---
-reason_for_visit_section  | Reason for visit   |  |  
+reason_for_visit_section  | Reason for visit, Reason for admission, Reason for hospitalization   |  |  (For admission note)
 triage_section | Triage | | *Not in C-CDA* for ED (ER)
 past_medical_history_section_growth_and_development | Growth and development | | *Sub field* of past_medical_history_section
+chief_complaint_section_triage  | CC from Triage point  |  |  *Sub field* of chief_complaint_section
 
 
   
