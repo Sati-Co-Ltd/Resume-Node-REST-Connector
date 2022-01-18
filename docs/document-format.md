@@ -164,8 +164,7 @@ history_of_present_illness_section | Present Illness, PI |  |
 past_medical_history_section | Past History, Past Illness, PH, PHx, Medical/Trauma history | |
 procedures_section | History of Procedure, Surgical history, Obsteric/Gynecologic history | past_medical_history_section | | 
 medications_section | Current Medication, History of medication | past_medical_history_section | |
-allergies_and_intolerances_section | Allergy, Adverse reaction, Intolerance, Sensitivity | past_medical_history_section | |
-family_history_section | Family history, FHx, FH | | 
+allergies_and_intolerances_section | Allergy, Adverse reaction, Intolerance, Sensitivity | past_md
 social_history_section | Social history, Social and Personal history | | Include alcohol, smoking, and substance use
 immunizations_section | Vaccination, Vaccine history, Immunization | past_medical_history_section | 
 review_of_systems_section | Review of System, Systematic Reviews | | 
@@ -182,9 +181,10 @@ follow_up_section | Follow up, Appointment, F/U | plan_of_treatment_section | *N
 
 **Extended fields**  
 
-Fields | User interface | Description 
----|---|---
-   |   | 
+Fields | User interface | Alternative UI | Description 
+---|---|---|---
+reason_for_visit_section  | Reason for visit   |  |  
+triage_section | Triage | | *Not in C-CDA* for ED
   
 **Reference**:
 - http://hl7.org/fhir/us/ccda/StructureDefinition-History-and-Physical.html
