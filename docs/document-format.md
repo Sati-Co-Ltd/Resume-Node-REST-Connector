@@ -161,13 +161,23 @@ Fields | User interface | Alternative UI | Description
 ---|---|---|---
 chief_complaint_section | Chief complaint, CC  | |
 history_of_present_illness_section | Present Illness, PI |  | 
-past_medical_history_section | Past History, Past Illness, PH, PHx, Current Medication | |
-allergies_and_intolerances_section | Allergy, Intolerance, Sensitivity | past_medical_history_section | |
+past_medical_history_section | Past History, Past Illness, PH, PHx, Medical/Trauma history | |
+procedures_section | History of Procedure, Surgical history, Obsteric/Gynecologic history | past_medical_history_section | | 
+medications_section | Current Medication, History of medication | past_medical_history_section | |
+allergies_and_intolerances_section | Allergy, Adverse reaction, Intolerance, Sensitivity | past_medical_history_section | |
 family_history_section | Family history, FHx, FH | | 
 social_history_section | Social history, Social and Personal history | | Include alcohol, smoking, and substance use
 immunizations_section | Vaccination, Vaccine history, Immunization | past_medical_history_section | 
 review_of_systems_section | Review of System, Systematic Reviews | | 
-vital_signs_section | Vital sign, V/S, VS |  | 
+vital_signs_section | Vital sign, V/S, VS | physical_exam_section | 
+general_status_section | General Status, General Appearance, GA | physical_exam_section | 
+physical_exam_section | Physical Exam, PE | | 
+problem_section | Problem list, Diagnosis, ICD-10 | | 
+assessment_section | Assessment, Progression | problem_section | 
+results_section | Lab, Imaging, X-Rays, Diagnostic Test, Diagnostic procedure | | 
+plan_of_treatment_section | Plan, Treatment, Plan of procedure | | 
+discharge_medications_section | Home Medication, Home Med, HM, Rx | plan_of_treatment_section | *Not in C-CDA*
+follow_up_section | Follow up, Appointment, F/U | plan_of_treatment_section | *Not in C-CDA*
 
 
 **Extended fields**  
