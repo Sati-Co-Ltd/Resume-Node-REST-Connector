@@ -1,5 +1,25 @@
 # Document format
 
+- [Document format](#document-format)
+  - [Nomenclature](#nomenclature)
+  - [How to use this document](#how-to-use-this-document)
+    - [Give the document format to API](#give-the-document-format-to-api)
+    - [Take standard response from API](#take-standard-response-from-api)
+    - [Give standard tag to API](#give-standard-tag-to-api)
+    - [Give extension tag to API](#give-extension-tag-to-api)
+  - [Document forms](#document-forms)
+    - [Care Plan Document](#care-plan-document)
+    - [Consultation Note](#consultation-note)
+    - [Continuity of Care Document](#continuity-of-care-document)
+    - [Diagnostic Imaging Report](#diagnostic-imaging-report)
+    - [Discharge Summary](#discharge-summary)
+    - [History and Physical](#history-and-physical)
+    - [Operative Note](#operative-note)
+    - [Procedure Note](#procedure-note)
+    - [Progress Note](#progress-note)
+    - [Referral Note](#referral-note)
+    - [Transfer Summary](#transfer-summary)
+
 ## Nomenclature
   
 Names of forms should follow [C-CDA (Consolidated Clinical Document Architecture)](http://hl7.org/fhir/us/ccda/artifacts.html).
@@ -43,20 +63,205 @@ let tag = 'other_doctor_note';
 
 ## Document forms
 
-### Identification
 
 ### Care Plan Document
 **Other name, or abbreviation**:  
 **Description**: 
 **Constant variable**: ``  
 **Standard fields**  
+
 | Fields | User interface | Description |
 |---|---|---|
 |   |   | |
   
 **Extended fields**  
+
 | Fields | User interface | Description |
 |---|---|---|
 |   |   | |
 
-###
+
+### Consultation Note
+**Other name, or abbreviation**:  
+**Description**: 
+**Constant variable**: ``  
+**Standard fields**  
+
+| Fields | User interface | Description |
+|---|---|---|
+|   |   | |
+  
+**Extended fields**  
+
+| Fields | User interface | Description |
+|---|---|---|
+|   |   | |
+
+
+### Continuity of Care Document
+**Other name, or abbreviation**:  
+**Description**: 
+**Constant variable**: ``  
+**Standard fields**  
+
+| Fields | User interface | Description |
+|---|---|---|
+|   |   | |
+  
+**Extended fields**  
+
+| Fields | User interface | Description |
+|---|---|---|
+|   |   | |
+
+
+
+### Diagnostic Imaging Report
+**Other name, or abbreviation**:  
+**Description**: 
+**Constant variable**: ``  
+**Standard fields**  
+
+| Fields | User interface | Description |
+|---|---|---|
+|   |   | |
+  
+**Extended fields**  
+
+| Fields | User interface | Description |
+|---|---|---|
+|   |   | |
+
+
+### Discharge Summary
+**Other name, or abbreviation**:  
+**Description**: 
+**Constant variable**: ``  
+**Standard fields**  
+
+| Fields | User interface | Description |
+|---|---|---|
+|   |   | |
+  
+**Extended fields**  
+
+| Fields | User interface | Description |
+|---|---|---|
+|   |   | |
+
+
+### History and Physical
+**Other name, or abbreviation**: OPD Card (Outpatient department), Admission note, History and Physical Exam document, H&amp;P note  
+**Description**: A History and Physical Exam (H&amp;P) note is medical record of patient's present and past conditions. The healthcare providers have to fill the H&amp;P note when patient visit at outpatient department (OPD) or emergency department (ED), upon pre-procedure, and before hospital admission.  
+  
+**Constant variable**: `HistoryAndPhysical`  
+**Standard fields**  
+
+Fields | User interface | Alternative UI | Description 
+---|---|---|---
+chief_complaint_section | Chief complaint, CC  | |
+history_of_present_illness_section | Present Illness, PI |  | 
+past_medical_history_section | Past History, Past Illness, PH, PHx, Current Medication | |
+allergies_and_intolerances_section | Allergy, Intolerance, Sensitivity | past_medical_history_section | |
+family_history_section | Family history, FHx, FH | | 
+social_history_section | Social history, Social and Personal history | | Include alcohol, smoking, and substance use
+immunizations_section | Vaccination, Vaccine history, Immunization | past_medical_history_section | 
+review_of_systems_section | Review of System, Systematic Reviews | | 
+vital_signs_section | Vital sign, V/S, VS |  | 
+
+
+**Extended fields**  
+
+Fields | User interface | Description 
+---|---|---
+   |   | 
+  
+**Reference**:
+- http://hl7.org/fhir/us/ccda/StructureDefinition-History-and-Physical.html
+- https://www.crhospital.org/webboard/upload/file/13844896107954.pdf
+
+### Operative Note
+**Other name, or abbreviation**:  
+**Description**: 
+**Constant variable**: ``  
+**Standard fields**  
+
+| Fields | User interface | Description |
+|---|---|---|
+|   |   | |
+  
+**Extended fields**  
+
+| Fields | User interface | Description |
+|---|---|---|
+|   |   | |
+
+
+### Procedure Note
+**Other name, or abbreviation**:  
+**Description**: 
+**Constant variable**: ``  
+**Standard fields**  
+
+| Fields | User interface | Description |
+|---|---|---|
+|   |   | |
+  
+**Extended fields**  
+
+| Fields | User interface | Description |
+|---|---|---|
+|   |   | |
+
+
+
+### Progress Note
+**Other name, or abbreviation**:  
+**Description**: 
+**Constant variable**: ``  
+**Standard fields**  
+
+| Fields | User interface | Description |
+|---|---|---|
+|   |   | |
+  
+**Extended fields**  
+
+| Fields | User interface | Description |
+|---|---|---|
+|   |   | |
+
+
+### Referral Note
+**Other name, or abbreviation**:  
+**Description**: 
+**Constant variable**: ``  
+**Standard fields**  
+
+| Fields | User interface | Description |
+|---|---|---|
+|   |   | |
+  
+**Extended fields**  
+
+| Fields | User interface | Description |
+|---|---|---|
+|   |   | |
+
+
+
+### Transfer Summary
+**Other name, or abbreviation**:  
+**Description**: 
+**Constant variable**: ``  
+**Standard fields**  
+
+| Fields | User interface | Description |
+|---|---|---|
+|   |   | |
+  
+**Extended fields**  
+
+| Fields | User interface | Description |
+|---|---|---|
+|   |   | |
