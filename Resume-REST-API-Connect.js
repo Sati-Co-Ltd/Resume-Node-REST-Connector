@@ -102,7 +102,7 @@ class ResumeHttpAPIClient {
      * @returns {Promise<axios.AxiosResponse>} Promise.all() of axios object
      */
     test() {
-        return Promise.all([this.client.get('test'), this.client.get('user')])
+        return Promise.all([this.client.get('')])
             .then((res) => {
                 res.forEach((v, k) => this.logger.info({ id: k, "response": v.data }, 'Test user connection'));
                 return res;
@@ -114,32 +114,35 @@ class ResumeHttpAPIClient {
      * @returns {Promise<axios.AxiosResponse>} Promise of axios object
      */
     testAnonymous() {
-        return axios.get(new URL("test", this.host).toString())
+        return axios.get(new URL("", this.host).toString())
             .then((res) => this.logger.info({ "response": res.data }, 'Test connection'))
             .catch(err => this.logger.error(err, 'Fail Test connection'));
     }
     /** 
      * Request new Resume Transcript Session from Resume API.
-     * @property {(int|string)} sectionId ID of section e.g. department number, section of organization name
-     * @property {string[]} lang language hints must be BCP-47 language code in string type or array of string type ordered by highest priority to suggest the speech-to-text API - the default is located in ./public/lang.json . See more detail of [BCP-47](https://github.com/libyal/libfwnt/wiki/Language-Code-identifiers)
-     * @property {string} docFormat Format of document to let the speech-to-text API to generate returned data - reference the name from "C-CDA 1.1.0 on FHIR" otherwise will be "Default". Please read [README.md](../README.md) and http://hl7.org/fhir/us/ccda/artifacts.html
-     * @property {Boolean} multiSpeaker mode of transcription automatically given from ResumeOne().newSession(...)
-     * @property {Date} userStartTime session starting datetime automatically given from ResumeOne().newSession(...)
+     * 
+     * 
+     * @property {boolean} [multiSpeaker] mode of transcription automatically given from ResumeOne().newSession(...)
+     * @property {(string)} [configID] ID of API configuration
+     * @property {(int|string)} [sectionId] ID of section e.g. department number, section of organization name
+     * @property {string[]} [lang] language hints must be BCP-47 language code in string type or array of string type ordered by highest priority to suggest the speech-to-text API - the default is located in ./public/lang.json . See more detail of [BCP-47](https://github.com/libyal/libfwnt/wiki/Language-Code-identifiers)
+     * @property {string} [docFormat] Format of document to let the speech-to-text API to generate returned data - reference the name from "C-CDA 1.1.0 on FHIR" otherwise will be "Default". Please read [README.md](../README.md) and http://hl7.org/fhir/us/ccda/artifacts.html
+     * @property {Date} [userStartTime] session starting datetime automatically given from ResumeOne().newSession(...)
      * @return {Promise<ResumeCommonFormat.ResumeSessionResponse>} Promise object of Session ID
      */
-    newSession(sectionID, lang, hint, docFormat, multiSpeaker, userStartTime) {
+    newSession(multiSpeaker, configID, sectionID, lang, hint, docFormat, userStartTime) {
         // check for doc format and lang
 
         // generate pseudo-identifier to send to server
         let time = Date.now();
-        let pseudoIden = (time.toString(36) + Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2)).substr(0, 32);
+        let pseudoIden = (time.toString(36) + Math.random().toString(36));
 
 
         let params = {
+            config: configID || ((multiSpeaker == null) ? CONFIG.configID : (multiSpeaker ? CONFIG.configIDCombinationMode : CONFIG.configIDDictationMode)),
             section_id: sectionID || CONFIG.section_id_default,
             lang: lang || CONFIG.lang,
             hint: hint || null,
-            multi_speaker: multiSpeaker || false,
             doc_format: docFormat || null,
             user_start_time: new Date(userStartTime).toJSON(),
             client_start_time: new Date(time).toJSON(),
@@ -155,11 +158,17 @@ class ResumeHttpAPIClient {
         return this.client.post("", params).then((res) => {
             // Read cookie
             let response = {
+                sessionId: res.data ? res.data.sessionId : null,
+                config: params.config,
+                TTL: res.data ? res.data.TTL : null,
+
                 status: res.status,
                 data: res.data,
+
                 clientStartTime: time,
                 userStartTime: userStartTime,
                 pseudoIdentifier: pseudoIden,
+
                 cookies: setCookie.parse(res, { decodeValues: false }).map((cookie) => {
                     this.logger.debug({ cookie: cookie }, 'Client: new session, received cookie');
                     return cookie.name + '=' + cookie.value
@@ -181,19 +190,28 @@ class ResumeHttpAPIClient {
      * @param {string} sessionId Resume API Session ID from newSession method
      * @param {string|int} sectionID ID of section e.g. department number, section of organization name
      * @param {ResumeCommonFormat.ResumeSoundInfo} info sound chunk information for Resume API
-     * @param {Blob} soundStream chunk of sound in WAV format
+     * @param {Object.<string,Blob>} soundStream chunk of sound in WAV format
      * @param {string} cookies HTTP header-encoded cookies string from newSession return, important for Resume API server process
      * @returns {Promise<ResumeCommonFormat.Transcript>} Promise object of Transcript from Resume API
      */
-    sendSound(sessionId, sectionID, info, soundStream, cookies) {
+    sendSound(sessionId, sectionID, info, soundStream, cookies, responsePosition) {
         // console.log('Prepare to put sound');
 
         var form = new FormData({ maxDataSize: 10500000 }); // 10 MB
-        form.append("session_id", sessionId);
+        form.append("session", sessionId);
+        form.append("fin", info.is_end || info.fin || info.final)
         form.append("section_id", sectionID || CONFIG.section_id_default);
 
+        if (info.tag != undefined) {
+            form.append("tag", info.tag);
+        }
 
-        let infoSubmit = {
+        if (responsePosition)
+            form.append("respos", responsePosition);
+
+
+        let metadata = {
+            section_id: sectionID || CONFIG.section_id_default,
             user_datetime: info.datetime || null,
             client_datetime: (new Date().toJSON()),
             is_end: info.is_end,
@@ -202,11 +220,12 @@ class ResumeHttpAPIClient {
         };
         if (info.user_transcript)
             //form.append("user_transcript", msgpack.pack(data.user_transcript,true));
-            infoSubmit.user_transcript = info.user_transcript
-        form.append("info", JSON.stringify(infoSubmit));
+            metadata.user_transcript = info.user_transcript
+        form.append("info", JSON.stringify(metadata));
 
         if (soundStream)
-            form.append("wav", soundStream, {
+            for()
+            form.append("wav+", soundStream, {
                 filename: (info._id.toString() || '0') + '.wav',
                 contentType: 'audio/wav'
             }); //'audio/webm'
@@ -217,7 +236,7 @@ class ResumeHttpAPIClient {
             {
                 session_id: sessionId,
                 section_id: sectionID || CONFIG.section_id_default,
-                info: infoSubmit,
+                info: metadata,
                 wav: soundStream ? soundStream.length : null,
                 Cookie: cookies
             }, 'Client: send sound to API');
