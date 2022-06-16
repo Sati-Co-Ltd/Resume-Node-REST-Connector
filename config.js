@@ -29,7 +29,13 @@ var credentials = {
     "password": process.env.REST_PW || "",
     "section_id_default": process.env.REST_DEFAULT_SECTION || 0,
     "lang_json": process.env.LANG_JSON || "./public/lang.json",
-    "lang": null
+    "lang": null,
+
+    /** API config */
+    "configID": process.env.API_CONFIG_ID || "0",
+    "configIDConversationMode": process.env.API_CONFIG_ID_CONV || '0',
+    "configIDDictationMode": process.env.API_CONFIG_ID_DICT || '0',
+    "configIDCombinationMode": process.env.API_CONFIG_ID_COM || '0',
 };
 
 const fs = require('fs');
