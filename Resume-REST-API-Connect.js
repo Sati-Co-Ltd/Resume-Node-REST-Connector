@@ -102,7 +102,7 @@ class ResumeHttpAPIClient {
      * @returns {Promise<axios.AxiosResponse>} Promise.all() of axios object
      */
     test() {
-        return Promise.all([this.client.get('test'), this.client.get('user')])
+        return Promise.all([this.client.get('/'), this.client.get('ws')])
             .then((res) => {
                 res.forEach((v, k) => this.logger.info({ id: k, "response": v.data }, 'Test user connection'));
                 return res;
