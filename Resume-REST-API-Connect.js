@@ -102,7 +102,7 @@ class ResumeHttpAPIClient {
      * @returns {Promise<axios.AxiosResponse>} Promise.all() of axios object
      */
     test() {
-        return Promise.all([this.client.get('/'), this.client.get('ws')])
+        return Promise.all([this.client.get('/')])
             .then((res) => {
                 res.forEach((v, k) => this.logger.info({ id: k, "response": v.data }, 'Test user connection'));
                 return res;
@@ -114,7 +114,7 @@ class ResumeHttpAPIClient {
      * @returns {Promise<axios.AxiosResponse>} Promise of axios object
      */
     testAnonymous() {
-        return axios.get(new URL("test", this.host).toString())
+        return axios.get(new URL("/", this.host).toString())
             .then((res) => this.logger.info({ "response": res.data }, 'Test connection'))
             .catch(err => this.logger.error(err, 'Fail Test connection'));
     }
