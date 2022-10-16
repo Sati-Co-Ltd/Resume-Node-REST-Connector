@@ -84,9 +84,9 @@ class ResumeHttpAPIClient {
         this.client.interceptors.request.use(oauth.interceptor(tokenProvider, this.credentials));
 
         axiosRetry(this.client, {
-            retries: 100,
+            retries: 200,
             retryCondition: function (error) {
-                return axiosRetry.isNetworkError(error) || axiosRetry.isRetryableError(error);
+                return true
             },
             retryDelay: function (retryCount, error) {
                 if ((retryCount < 50) || (error.config && error.config.method && error.config.method == 'post')) {
