@@ -194,12 +194,12 @@ class ResumeHttpAPIClient {
      * @param {string} cookies HTTP header-encoded cookies string from newSession return, important for Resume API server process
      * @returns {Promise<ResumeCommonFormat.Transcript>} Promise object of Transcript from Resume API
      */
-    sendSound(sessionId, sequenceNo, final, soundStream, metadata, cookies, responsePosition) {
+    sendSound(sessionId, sequenceNo, metadata, soundStream, cookies, responsePosition) {
         // console.log('Prepare to put sound');
 
         var form = new FormData({ maxDataSize: 10500000 }); // 10 MB
         form.append("session", sessionId);
-        form.append("fin", final)
+        form.append("fin", metadata.is_end)
 
         if (metadata.tag != undefined) {
             form.append("tag", metadata.tag);
@@ -210,10 +210,11 @@ class ResumeHttpAPIClient {
         form.append("respos", responsePosition || 0);
 
 
-        let metadata = {
+        metadata = {
             section_id: sectionID.sectionID || CONFIG.section_id_default,
             user_datetime: metadata.datetime || null,
             client_datetime: (new Date().toJSON()),
+            is_end: metadata.is_end,
             tag: metadata.tag,
             _id: metadata._id
         };
