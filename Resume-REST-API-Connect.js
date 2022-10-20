@@ -84,9 +84,9 @@ class ResumeHttpAPIClient {
         this.client.interceptors.request.use(oauth.interceptor(tokenProvider, this.credentials));
 
         axiosRetry(this.client, {
-            retries: 100,
+            retries: 200,
             retryCondition: function (error) {
-                return axiosRetry.isNetworkError(error) || axiosRetry.isRetryableError(error);
+                return true
             },
             retryDelay: function (retryCount, error) {
                 if ((retryCount < 50) || (error.config && error.config.method && error.config.method == 'post')) {
@@ -189,46 +189,46 @@ class ResumeHttpAPIClient {
      * Send sound chunk to Resume API
      * @param {string} sessionId Resume API Session ID from newSession method
      * @param {string|int} sectionID ID of section e.g. department number, section of organization name
-     * @param {ResumeCommonFormat.ResumeSoundInfo} info sound chunk information for Resume API
+     * @param {ResumeCommonFormat.ResumeSoundInfo} metadata sound chunk information for Resume API
      * @param {Object.<string,Blob>} soundStream chunk of sound in WAV format
      * @param {string} cookies HTTP header-encoded cookies string from newSession return, important for Resume API server process
      * @returns {Promise<ResumeCommonFormat.Transcript>} Promise object of Transcript from Resume API
      */
-    sendSound(sessionId, sectionID, info, soundStream, cookies, responsePosition) {
+    sendSound(sessionId, sequenceNo, metadata, soundStream, cookies, responsePosition) {
         // console.log('Prepare to put sound');
 
         var form = new FormData({ maxDataSize: 10500000 }); // 10 MB
         form.append("session", sessionId);
-        form.append("fin", info.is_end || info.fin || info.final)
-        form.append("section_id", sectionID || CONFIG.section_id_default);
+        form.append("fin", metadata.is_end)
 
-        if (info.tag != undefined) {
-            form.append("tag", info.tag);
+        if (metadata.tag != undefined) {
+            form.append("tag", metadata.tag);
         }
 
-        if (responsePosition)
-            form.append("respos", responsePosition);
+        form.append('seq', sequence_no)
+
+        form.append("respos", responsePosition || 0);
 
 
-        let metadata = {
-            section_id: sectionID || CONFIG.section_id_default,
-            user_datetime: info.datetime || null,
+        metadata = {
+            section_id: sectionID.sectionID || CONFIG.section_id_default,
+            user_datetime: metadata.datetime || null,
             client_datetime: (new Date().toJSON()),
-            is_end: info.is_end,
-            tag: info.tag,
-            _id: info._id
+            is_end: metadata.is_end,
+            tag: metadata.tag,
+            _id: metadata._id
         };
-        if (info.user_transcript)
+        if (metadata.user_transcript)
             //form.append("user_transcript", msgpack.pack(data.user_transcript,true));
-            metadata.user_transcript = info.user_transcript
-        form.append("info", JSON.stringify(metadata));
+            metadata.user_transcript = metadata.user_transcript
+        form.append("metadata", JSON.stringify(metadata));
 
         if (soundStream)
-            for()
-            form.append("wav+", soundStream, {
-                filename: (info._id.toString() || '0') + '.wav',
-                contentType: 'audio/wav'
-            }); //'audio/webm'
+            for (let k in soundStream)
+                form.append("wav-" + k, soundStream[k], {
+                    filepath: k + '/' + (sequenceNo.toString() || '0') + '.wav',
+                    contentType: 'audio/wav'
+                }); //'audio/webm'
         //console.log('Append wav:: ' + form.getBuffer().length);
         //console.log('Headers ' + JSON.stringify(form.getHeaders()));
 
